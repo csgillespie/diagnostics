@@ -3,8 +3,6 @@ library(lhs)
 library(issb)
 source("R/helper.R")
 
-## Get the model from the issb package
-demo("lv", ask=FALSE)
 maxtime = 30
 
 ###################################################################
@@ -88,7 +86,7 @@ saveRDS(sim_lna, file="data/lv_lna.RData")
 ## Get Simulations
 ###################################################################
 ## Form the model
-demo("lv", ask=FALSE)
+source("models/lv.R")
 theta = c(10^-4, 0.1, 0.30000)
 model$get_pars(theta)
 model$get_initial(c(100, 100))
