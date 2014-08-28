@@ -12,10 +12,9 @@ maxtime = 30
 lvmodel = function(t, x, parms) {
   with(as.list(c(x, parms)),{
     
-    k11 = k11*is_mc
     ##Means - notice the covariance term
-    dk10 = c1*k10 - c2*k10*k01 - c2*k11
-    dk01 = c2*k10*k01 -  c3*k01 + c2*k11
+    dk10 = c1*k10 - c2*k10*k01 - c2*k11*is_mc
+    dk01 = c2*k10*k01 -  c3*k01 + c2*k11*is_mc
     
     ##Variances and covariance with the Normal approximation
     dk20 = c2*k11 + 2*k20*(c1 -c2*k01) +
