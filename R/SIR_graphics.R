@@ -57,12 +57,12 @@ dd_dif = data.frame(x=x[,2],
                     y= c(sim_gil[,1] - sim_tau[,1], sim_gil[,1] - sim_diff[,1]), 
                     type=rep(c("tau-leap", "CLE"), each=nrow(sim_gil)))
 g2 = ggplot(dd_dif, aes(x, y)) + 
-  geom_point(size=1) + stat_smooth(se = FALSE, lwd=1.5) + 
+  geom_point(size=1) + stat_smooth(se = FALSE, lwd=1.5, col=3) + 
   xlab(expression(c[2])) + 
   ylab("Difference") + 
   ylim(c(-60, 100)) + 
   facet_grid(~type, labeller=label_parsed)
-g2
+#g2
 ################################################################
 #Stochastic simulation plots
 ################################################################
@@ -77,7 +77,8 @@ m = m[m$sim_no < 6,]
 g3 = ggplot(m) + 
   geom_step(aes(Time, pop, group=sim_no), alpha=0.20) + 
   xlab("Time") + ylab("Population") + 
-  facet_grid(type ~ species, scale="free_y", labeller=label_parsed)
+  facet_grid(type ~ species, scale="free_y", labeller=label_parsed) + 
+  ylim(c(0, 90))
 #g3
 
 ################################################################
@@ -101,6 +102,33 @@ pdf(fname, width=6, height=6)
 print(g3)
 dev.off()
 crop_plot(fname)
+
+
+
+fname = paste0(dir, "sir_f1.jpg")
+jpeg(fname, width=6*resol, height=6*resol, res=resol)
+print(g1)
+dev.off()
+
+
+fname = paste0(dir, "sir_f2.jpg")
+jpeg(fname, width=6*resol, height=4*resol, res=resol)
+print(g2)
+dev.off()
+
+
+fname = paste0(dir, "sir_f3.jpg")
+jpeg(fname, width=6*resol, height=6*resol, res=resol)
+print(g3)
+dev.off()
+
+
+
+
+
+
+
+
 
 
 

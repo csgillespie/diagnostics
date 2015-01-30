@@ -5,6 +5,7 @@ theme_set(theme_bw())
 dir = "graphics/"
 mypalette()
 
+
 ###################################################################
 ## Read in data generate from schlogl_diagnostics.R
 ###################################################################
@@ -33,7 +34,7 @@ g = g0 + scale_x_continuous(trans="log10",
   scale_y_continuous(trans="log10", 
                      breaks=c(10^{-2}, 10^{-1}, 10^{0}, 10^{1}), 
                      labels=c(expression(10^{-2}), expression(10^{-1}), expression(10^{0}), expression(10^{1}))) + 
-  annotate("text", x=10^{-4}, 10, label="(a)", size=4, vjust = -0.3)
+  annotate("text", x=10^{-4}, 10, label="(a)", size=4, vjust = 1)
 #g
 
 ###################################################################
@@ -95,7 +96,7 @@ dd_l$out = dd_l$sim > dd_l$upper | dd_l$sim < dd_l$lower
 
 
 g9 = ggplot(dd_l, aes(x=x)) + 
-  geom_linerange(aes(ymin=lower, ymax=upper), size=0.01) + 
+  geom_linerange(aes(ymin=lower, ymax=upper), size=0.1) + 
   geom_point(aes(y=sim, colour=out), size=1) + 
   scale_color_manual(values = c("black", 2), guide=FALSE) + 
   xlab(expression(c[3])) + 
@@ -109,8 +110,7 @@ g10 = g9 + annotate("text", x=10^{-4}, 1200, label="(c)", size=4)
   
 
 ###################################################################
-## Save plots
-###################################################################
+## Save plots as pdf
 fname = paste0(dir, "lhs_f2.pdf")
 pdf(fname, width=4, height=4)
 print(g)
@@ -135,4 +135,26 @@ print(g10)
 dev.off()
 crop_plot(fname)
 
+###################################################################
+## Save plots as jpg
+
+fname = paste0(dir, "lhs_f2.jpg")
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
+print(g)
+dev.off()
+
+fname = paste0(dir, "schlogl_f1.jpg")
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
+print(g2)
+dev.off()
+
+fname = paste0(dir, "schlogl_f2.jpg")
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
+print(g8)
+dev.off()
+
+fname = paste0(dir, "schlogl_f3.jpg")
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
+print(g10)
+dev.off()
 

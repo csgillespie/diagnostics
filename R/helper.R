@@ -8,7 +8,7 @@ scale_lhs = function(x, c, a, b) {
   c + x*(b-a)
 }
 
-
+resol = 1000
 
 #############################################
 ## Plotting functions
@@ -51,3 +51,5 @@ crop_plot = function(fname) {
   cmd = paste(cmd, "&& rm -v", fname)
   system(cmd)
 }
+
+vplayout = function(x, y) viewport(layout.pos.row = x, layout.pos.col = y)

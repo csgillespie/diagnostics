@@ -33,20 +33,29 @@ g1 = ggplot(dd, aes(x1, x2)) +
   scale_color_manual(values=c(2, 4)) +
   annotate("text", 10^{-6}, 10^0, label="(a)", size=4, hjust=-0.5)
 #g1
+g1
 
 
 ###########################################################
 ## Example simulations
 ###########################################################
 dd_text = data.frame(Time=0, value = 100, variable="Prey", label="(b)")
-
 g2 = ggplot(d_ms_sub) + 
   geom_step(aes(Time, value, group=sim_no), alpha=0.15) + 
   xlab("Time") + 
   ylab("Population") + 
   facet_grid(variable~., scales="free_y") + 
   geom_text(data=dd_text, aes(Time, value, label=label), size=4, hjust=-0.5)
-#g2
+g2
+
+
+g3 = ggplot(d_ms_sub) + 
+  geom_step(aes(Time, value, group=sim_no), alpha=0.15) + 
+  xlab("Time") + 
+  ylab("Population") + 
+  facet_grid(.~variable) 
+g3
+
 
 ###########################################################
 ## Save graph
@@ -63,4 +72,21 @@ pdf(fname, width=4, height=4)
 print(g2)
 dev.off()
 crop_plot(fname)
+
+
+
+fname = paste0(dir, "lv_f1.jpg")
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
+print(g1)
+dev.off()
+
+
+fname = paste0("/tmp/lv_f3.jpg")
+jpeg(fname, width=8*resol, height=4*resol, res=resol)
+print(g3)
+dev.off()
+
+
+
+
 
