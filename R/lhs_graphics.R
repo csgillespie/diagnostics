@@ -28,14 +28,14 @@ g
 ###########################################################
 ## Save graph 
 ###########################################################
-fname = paste0(dir, "lhs_f1.pdf")
+fname = paste0(dir, "figure1.pdf")
 pdf(fname, width=5, height=5)
 print(g)
 dev.off()
 crop_plot(fname)
 
 
-fname = paste0(dir, "lhs_f1.jpg")
+fname = paste0(dir, "figure1.jpg")
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g)
 dev.off()

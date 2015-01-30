@@ -110,50 +110,24 @@ g10 = g9 + annotate("text", x=10^{-4}, 1200, label="(c)", size=4)
   
 
 ###################################################################
-## Save plots as pdf
-fname = paste0(dir, "lhs_f2.pdf")
-pdf(fname, width=4, height=4)
-print(g)
-dev.off()
-crop_plot(fname)
-
-fname = paste0(dir, "schlogl_f1.pdf")
-pdf(fname, width=4, height=4)
-print(g2)
-dev.off()
-crop_plot(fname)
-
-fname = paste0(dir, "schlogl_f2.pdf")
-pdf(fname, width=8, height=4)
-print(g8)
-dev.off()
-crop_plot(fname)
-
-fname = paste0(dir, "schlogl_f3.pdf")
-pdf(fname, width=8, height=4)
-print(g10)
-dev.off()
-crop_plot(fname)
-
-###################################################################
 ## Save plots as jpg
 
-fname = paste0(dir, "lhs_f2.jpg")
+fname = paste0(dir, "figure2a.jpg")
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g)
 dev.off()
 
-fname = paste0(dir, "schlogl_f1.jpg")
+fname = paste0(dir, "figure2b.jpg")
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g2)
 dev.off()
 
-fname = paste0(dir, "schlogl_f2.jpg")
+fname = paste0(dir, "figure2c.jpg")
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g8)
 dev.off()
 
-fname = paste0(dir, "schlogl_f3.jpg")
+fname = paste0(dir, "figure2d.jpg")
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g10)
 dev.off()

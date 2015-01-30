@@ -46,43 +46,29 @@ g2 = ggplot(d_ms_sub) +
   ylab("Population") + 
   facet_grid(variable~., scales="free_y") + 
   geom_text(data=dd_text, aes(Time, value, label=label), size=4, hjust=-0.5)
-g2
+#g2
 
 
 g3 = ggplot(d_ms_sub) + 
   geom_step(aes(Time, value, group=sim_no), alpha=0.15) + 
   xlab("Time") + 
   ylab("Population") + 
-  facet_grid(.~variable) 
+  facet_grid(variable~.) 
 g3
 
 
 ###########################################################
 ## Save graph
 ###########################################################
-fname = paste0(dir, "lv_f1.pdf")
-pdf(fname, width=4, height=4)
-print(g1)
-dev.off()
-crop_plot(fname)
 
-
-fname = paste0(dir, "lv_f2.pdf")
-pdf(fname, width=4, height=4)
-print(g2)
-dev.off()
-crop_plot(fname)
-
-
-
-fname = paste0(dir, "lv_f1.jpg")
+fname = "graphics/figure3a.jpg"
 jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g1)
 dev.off()
 
 
-fname = paste0("/tmp/lv_f3.jpg")
-jpeg(fname, width=8*resol, height=4*resol, res=resol)
+fname = "graphics/figure3b.jpg"
+jpeg(fname, width=4*resol, height=4*resol, res=resol)
 print(g3)
 dev.off()
 

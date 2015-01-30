@@ -21,7 +21,7 @@ resol = 1000
 
 
 ## Prior graphic
-jpeg("graphics/auto2.jpg",  width=12*resol, height = 8*resol, res = resol)
+jpeg("graphics/figure5.jpg",  width=12*resol, height = 8*resol, res = resol)
 I = 6
 setnicepar(mfrow=c(2, 3), cex.axis = 1, cex=1.3)
 hist(dd_prior[,I], breaks="fd", freq=F, col="grey70", main=NULL, ylim=c(0, 0.5), xlim=c(-4.5, 4.5), 
@@ -61,7 +61,7 @@ dev.off()
 
 
 ## Post graphic
-jpeg("graphics/auto3.jpg",  width=12*resol, height = 8*resol, res = resol)
+jpeg("graphics/figure6.jpg",  width=12*resol, height = 8*resol, res = resol)
 setnicepar(mfrow=c(2, 3), cex.axis = 1, cex=1.3)
 I = 6
 hist(dd_post[,I], breaks="fd", col="grey70", freq=FALSE, ylim=c(0, 0.5), main=NULL,

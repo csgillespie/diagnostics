@@ -49,7 +49,7 @@ g3 = ggplot(data =a, aes(x=Time, y=G)) +
 
 
 resol = 1000
-jpeg("graphics/auto1.jpg",  width=8*resol, height = 8*resol, res = resol)
+jpeg("graphics/figure4.jpg",  width=8*resol, height = 8*resol, res = resol)
 grid.newpage()
 pushViewport(viewport(layout = grid.layout(2, 2)))
 print(g1c, vp = vplayout(1, 1:2))
