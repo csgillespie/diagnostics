@@ -1,5 +1,5 @@
-library(gridExtra)
-library(ggplot2)
+library("gridExtra")
+library("ggplot2")
 source("R/helper.R")
 dir = "graphics/"
 theme_set(theme_bw())
@@ -16,7 +16,8 @@ d_ms_sub = readRDS(file="data/lv_ms.RData")
 ###########################################################
 ## Mark points with large values
 ###########################################################
-dd = data.frame(x1 = x[,1], x2 = x[,2], z=(sim_mc[,3]- sim_lna[,3])^2/sim_lna[,3])
+dd = data.frame(x1 = x[,1], x2 = x[,2], 
+                z=(sim_mc[,3]- sim_lna[,3])/sim_lna[,6])
 dd$Extreme = abs(dd$z) > 5 | is.na(dd$z)
 
 g1 = ggplot(dd, aes(x1, x2)) + 
