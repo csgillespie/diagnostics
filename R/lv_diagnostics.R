@@ -1,40 +1,13 @@
 library("deSolve")
 library("lhs")
 library("issb")
+library("Rcpp")
 library("reshape2")
 source("R/helper.R")
-
-maxtime = 30
-
-###################################################################
-## Moment closure LV equations. 
-## Additional parameter is_mc used to switch to LNA
-###################################################################
-lvmodel = function(t, x, parms) {
-  with(as.list(c(x, parms)),{
-    
-    ##Means - notice the covariance term
-    dk10 = c1*k10 - c2*k10*k01 - c2*k11*is_mc
-    dk01 = c2*k10*k01 -  c3*k01 + c2*k11*is_mc
-    
-    ##Variances and covariance with the Normal approximation
-    dk20 = c2*k11 + 2*k20*(c1 -c2*k01) +
-      k10*(c1 -2*c2*k11 + c2*k01)
-    
-    dk11 = k11*(c1- c2*(1 - k01+ k10) - c3) +
-      c2*k20*k01 - c2*k10*(k02+k01)
-    
-    dk02 = c2*k11  + 2*k02*(c2*k10 - c3)  +
-      k01*(2*c2*k11 + c3 + c2*k10)
-    
-    res = c(dk10, dk01, dk20, dk11, dk02)
-    list(res)
-  })
-}
-
+source("R/lv_functions.R")
 
 ###################################################################
-## Form LHD
+## Construct LHD
 ###################################################################
 set.seed(1)
 N = 100
@@ -50,56 +23,61 @@ saveRDS(x, file="data/lv_lhs.RData")
 ###################################################################
 
 ## Moment closure
-sim_mc = matrix(0, ncol=6, nrow=NROW(x))
-for(i in seq_along(x[,1])) {
-  pars = c(c1 = x[i,1], c2 = x[i,2], c3 = x[i,3], is_mc = TRUE)
-  yini = c(k10=100, k01=100, k20=0, k11=0, k02=0)
-  times = seq(0, maxtime, length.out=2)
-  
-  ## At extreme points the MC approximation breaks down
-  ## Catch error and do something sensible
-  out = try(ode(yini, times, lvmodel, pars), silent=TRUE)
-  if(inherits(out, "try-error")) 
-    sim_mc[i,] = rep(NA_real_, 6)
-  else 
-    sim_mc[i,] = out[2,]
-  message(i)
-}
-saveRDS(sim_mc, file="data/lv_mc.RData")
+sim_mc_30 = lv_simulate(x, maxtime=30, is_mc=TRUE)
+sim_mc_100 = lv_simulate(x, maxtime=100, is_mc=TRUE)
+saveRDS(sim_mc_30, file="data/lv_mc_30.RData")
+saveRDS(sim_mc_100, file="data/lv_mc_100.RData")
 
-## LNA
-sim_lna = matrix(0, ncol=6, nrow=NROW(x))
-for(i in seq_along(x[,1])) {
-  pars = c(c1 = x[i,1], c2 = x[i,2], c3 = x[i,3], is_mc = FALSE)
-  yini = c(k10=100, k01=100, k20=0, k11=0, k02=0)
-  times <- seq(0, maxtime, length.out=2)
-  out   <- try(ode(yini, times, lvmodel, pars), silent=TRUE)
-  if(inherits(out, "try-error")) 
-    sim_lna[i,] = rep(NA_real_, 6)
-  else 
-    sim_lna[i,] = out[2,]
-  message(i)
-}
-saveRDS(sim_lna, file="data/lv_lna.RData")
+sim_lna_30 = lv_simulate(x, maxtime=30, is_mc=FALSE)
+sim_lna_100 = lv_simulate(x, maxtime=100, is_mc=FALSE)
+saveRDS(sim_lna_30, file="data/lv_lna_30.RData")
+saveRDS(sim_lna_100, file="data/lv_lna_100.RData")
+
+#x = x[6,, drop=FALSE]
+# mc = lv_simulate(x[6,,drop=F], maxtime=1, is_mc=FALSE)
+# mc
+
+
 
 ###################################################################
 ## Get Simulations
 ###################################################################
 ## Form the model
 source("models/lv.R")
-theta = c(10^-4, 0.1, 0.30000)
+Rcpp::sourceCpp("src/lv.cpp")
+i = 3
+maxtime = 100
+no_of_sims = 1000
+probs = matrix(0, ncol=3, nrow(x))
+for(i in 1:nrow(x)) {
+  theta = x[i,]; p=0
+  for(j in 1:no_of_sims) {
+    ext = is_extinct(theta[1], theta[2], theta[3], maxtime)  
+    probs[i,ext] = probs[i,ext] + 1
+  }
+  message(i)
+}
+#probs_30 = probs
+probs_100 = probs
+## 44, 79
+#saveRDS(probs_30, file="data/lv_extinction_t30.RData")
+ms
+?issb::multiple_sims
+theta = x[3,]
+
+theta[1:2] = c(10^-6, 10^-6)
 model$get_pars(theta)
 model$get_initial(c(100, 100))
+g = gillespie(model, maxtime=100)
+head(g)
+setnicepar(mfrow=c(1, 2))
+plot(g[,1], g[,2], type="l")
+plot(g[,1], g[,3], type="l")
 
-## Do a few simulations
-ms = multiple_sims(model, 
-                   simulator=gillespie, 
-                   maxtime=maxtime, 
-                   tstep=0.01, 
-                   no_sims=50, 
-                   no_cores=6)
+tail(g)
 
 
+ms
 d_ms = as.data.frame(ms)
 d_ms_sub = melt(d_ms, c("sim_no", "Time"))
 saveRDS(d_ms_sub, file="data/lv_ms.RData")
