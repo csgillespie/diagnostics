@@ -1,7 +1,7 @@
 library(lhs)
 library(issb)
 source("R/helper.R")
-
+source("models/schlogl.R")
 N = 10000
 if(N == 1000) {dir = "data/"
 } else {dir = paste0("data/N_", N, "_")}
@@ -9,7 +9,7 @@ if(N == 1000) {dir = "data/"
 ###################################################################
 ## Load model 
 ###################################################################
-source("models/schlogl.R")
+
 maxtime = 5.0
 (theta = model$get_pars())
 (initial = model$get_initial())
@@ -96,7 +96,7 @@ out = lna(model, maxtime, ddt = 0.001, noise=FALSE)
 saveRDS(as.data.frame(out), file=paste0(dir, "schlogl_res_lna_sims.RData"))
 
 ###################################################################
-## Get simulations for largest error bar
+## Get simulations for largest residual
 ###################################################################
 #(max_res = which.max(abs(res[,1])))
 theta[4:3] = x[max_res,]
@@ -123,6 +123,26 @@ saveRDS(as.data.frame(out), file=paste0(dir, "schlogl_err_lna_sims.RData"))
 
 
 
+## Largest error bar
+theta[4:3] = x[5048,]
+model$get_initial(initial)
+model$get_pars(theta)
+
+ms = multiple_sims(model, 
+                   simulator=gillespie, 
+                   maxtime=maxtime, 
+                   tstep=0.01, 
+                   no_sims=50, 
+                   no_cores=6)
+d_ms = as.data.frame(ms)
+saveRDS(d_ms, file=paste0(dir, "schlogl_err_sims_large_eb.RData"))
+
+theta[4:3] = x[5048,]
+model$get_initial(initial)
+model$get_pars(theta)
+
+out = lna(model, maxtime, ddt = 0.001, noise=FALSE)
+saveRDS(as.data.frame(out), file=paste0(dir, "schlogl_err_lna_sims_large_eb.RData"))
 
 
 

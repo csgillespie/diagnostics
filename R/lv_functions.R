@@ -26,7 +26,7 @@ lvmodel = function(t, x, parms) {
 
 lv_simulate = function(x, maxtime, is_mc=TRUE){
   results = matrix(0, ncol=6, nrow=NROW(x))
-  i = 11
+  i = 1
   for(i in seq_along(x[,1])) {
     pars = c(c1 = x[i,1], c2 = x[i,2], c3 = x[i,3], is_mc = is_mc)
     yini = c(k10=100, k01=100, k20=0, k11=0, k02=0)
@@ -49,11 +49,11 @@ lv_simulate = function(x, maxtime, is_mc=TRUE){
 
 # library("deSolve")
 # i = 96
- is_mc = T#FALSE
- maxtime = 100
- pars = c(c1 = theta[1], c2 = theta[2], c3 = theta[3], is_mc = is_mc)
-yini = c(k10=100, k01=100, k20=0, k11=0, k02=0)
-times = seq(0, maxtime, length.out=1000)
-which(x[,1] > 0.1 & x[,2] < 10^{-4})
+#  is_mc = T#FALSE
+#  maxtime = 100
+#  pars = c(c1 = theta[1], c2 = theta[2], c3 = theta[3], is_mc = is_mc)
+# yini = c(k10=100, k01=100, k20=0, k11=0, k02=0)
+# times = seq(0, maxtime, length.out=1000)
+# which(x[,1] > 0.1 & x[,2] < 10^{-4})
 ## At extreme points the MC approximation breaks down
 ## Catch error and do something sensible
