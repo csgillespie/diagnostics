@@ -1,4 +1,3 @@
-library("gridExtra")
 library("ggplot2")
 #source("R/helper.R")
 library(plotly)

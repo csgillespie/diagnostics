@@ -28,4 +28,4 @@ pars_post = read.csv("post.csv", header=FALSE)[s,]
 
 
 
-#rsconnect::deployApp("diagnostics_dashboard.Rmd", account="csgillespie")
+#rsconnect::deployApp("diagnostics.Rmd", account="csgillespie")
